@@ -74,11 +74,11 @@ cd $OE_HOME
 sudo su $OE_USER -c "git clone --depth 1 --single-branch --branch $OE_VERSION https://www.github.com/odoo/odoo $OE_HOME_EXT/"
 cd -
 
-echo -e "\n---- Create custom module directory ----"
+echo -e "\n---- Criar diretório módulo personalizado ----"
 sudo su $OE_USER -c "mkdir $OE_HOME/custom"
 sudo su $OE_USER -c "mkdir $OE_HOME/custom/addons"
 
-echo -e "\n---- Setting permissions on home folder ----"
+echo -e "\n---- Ajuste de permissão na pasta de início ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
 
