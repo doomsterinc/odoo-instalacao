@@ -22,7 +22,7 @@ OE_SUPERADMIN="superadminpassword"
 OE_CONFIG="$OE_USER-server"
 
 
-echo -e "\n---- Update Servidor ----"
+echo -e "\n---- Atualizando Servidor ----"
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y locales
@@ -96,7 +96,7 @@ sudo chown $OE_USER:$OE_USER /etc/$OE_CONFIG.conf
 sudo chmod 640 /etc/$OE_CONFIG.conf
 
 echo -e "* Trocando local do arquivo de configuracao do server "
-echo -e "** Remover linhas indesejadas"
+echo -e "** Removendo linhas indesejadas"
 sudo sed -i "/db_user/d" /etc/$OE_CONFIG.conf
 sudo sed -i "/admin_passwd/d" /etc/$OE_CONFIG.conf
 sudo sed -i "/addons_path/d" /etc/$OE_CONFIG.conf
