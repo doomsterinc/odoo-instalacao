@@ -85,7 +85,7 @@ sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 echo -e "\n---- Instalando requerimentos ----"
 sudo pip install -r $OE_HOME_EXT/requirements.txt
 
-#echo -e "\n---- Install python packages ----"
+#echo -e "\n---- Instalando pacotes do python ----"
 sudo easy_install pyPdf vatnumber pydot psycogreen suds ofxparse
 
 
