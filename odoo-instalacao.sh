@@ -3,10 +3,10 @@
 #
 # USAGE:
 #
-# odoo-install
+# odoo-instalacao
 #
 # EXAMPLE:
-# ./odoo-install 
+# ./odoo-instalacao 
 #
 ################################################################################
 
