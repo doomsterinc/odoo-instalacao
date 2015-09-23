@@ -22,7 +22,7 @@ OE_SUPERADMIN="superadminpassword"
 OE_CONFIG="$OE_USER-server"
 
 
-echo -e "\n---- Update Server ----"
+echo -e "\n---- Update Servidor ----"
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y locales
@@ -32,34 +32,34 @@ sudo dpkg-reconfigure locales
 sudo locale-gen C.UTF-8
 sudo /usr/sbin/update-locale LANG=C.UTF-8
 
-echo -e "\n---- Set locales ----"
+echo -e "\n---- Setando Locais ----"
 echo 'LC_ALL=C.UTF-8' >> /etc/environment
 
-echo -e "\n---- Install PostgreSQL Server ----"
+echo -e "\n---- Instalando PostgreSQL Server ----"
 sudo apt-get install postgresql -y
 
-echo -e "\n---- PostgreSQL $PG_VERSION Settings  ----"
+echo -e "\n---- Configurando PostgreSQL $PG_VERSION ----"
 sudo sed -i s/"#listen_addresses = 'localhost'"/"listen_addresses = '*'"/g /etc/postgresql/9.4/main/postgresql.conf
 
-echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
+echo -e "\n---- Criando usuario ODOO PostgreSQL ----"
 sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
 
 sudo service postgresql restart
 
 
 
-echo -e "\n---- Create ODOO system user ----"
+echo -e "\n---- Criando usuario do sistema ODOO ----"
 sudo adduser --system --quiet --shell=/bin/bash --home=$OE_HOME --gecos 'ODOO' --group $OE_USER
 
-echo -e "\n---- Create Log directory ----"
+echo -e "\n---- Criando diretorio de Log ----"
 sudo mkdir /var/log/$OE_USER
 sudo chown $OE_USER:$OE_USER /var/log/$OE_USER
 
 
-echo -e "\n---- Install tool packages ----"
+echo -e "\n---- Instalando pacotes prioritarios ----"
 sudo apt-get install wget git python-pip python-imaging python-setuptools python-dev libxslt-dev libxml2-dev libldap2-dev libsasl2-dev node-less postgresql-server-dev-all -y
 
-echo -e "\n---- Install wkhtml and place on correct place for ODOO 8 ----"
+echo -e "\n---- Instalando wkhtml e colocando ODOO 8 no lugar correto ----"
 sudo wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
 sudo dpkg -i wkhtmltox-0.12.2.1_linux-trusty-amd64.deb
 sudo apt-get install -f -y
@@ -82,7 +82,7 @@ echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
 
-echo -e "\n---- Install tool packages ----"
+echo -e "\n---- Instalando requerimentos ----"
 sudo pip install -r $OE_HOME_EXT/requirements.txt
 
 #echo -e "\n---- Install python packages ----"
@@ -90,31 +90,31 @@ sudo easy_install pyPdf vatnumber pydot psycogreen suds ofxparse
 
 
 
-echo -e "* Create server config file"
+echo -e "* Criando arquivo de configuracao do server"
 sudo cp $OE_HOME_EXT/debian/openerp-server.conf /etc/$OE_CONFIG.conf
 sudo chown $OE_USER:$OE_USER /etc/$OE_CONFIG.conf
 sudo chmod 640 /etc/$OE_CONFIG.conf
 
-echo -e "* Change server config file"
-echo -e "** Remove unwanted lines"
+echo -e "* Trocando local do arquivo de configuracao do server "
+echo -e "** Remover linhas indesejadas"
 sudo sed -i "/db_user/d" /etc/$OE_CONFIG.conf
 sudo sed -i "/admin_passwd/d" /etc/$OE_CONFIG.conf
 sudo sed -i "/addons_path/d" /etc/$OE_CONFIG.conf
 
-echo -e "** Add correct lines"
+echo -e "** Escrevendo linhas corretas"
 sudo su root -c "echo 'db_user = $OE_USER' >> /etc/$OE_CONFIG.conf"
 sudo su root -c "echo 'admin_passwd = $OE_SUPERADMIN' >> /etc/$OE_CONFIG.conf"
 sudo su root -c "echo 'logfile = /var/log/$OE_USER/$OE_CONFIG$1.log' >> /etc/$OE_CONFIG.conf"
 sudo su root -c "echo 'addons_path=$OE_HOME_EXT/addons,$OE_HOME/custom/addons' >> /etc/$OE_CONFIG.conf"
 
-echo -e "* Create startup file"
+echo -e "* Criando arquivo de inicializacao"
 sudo su root -c "echo '#!/bin/sh' >> $OE_HOME_EXT/start.sh"
 sudo su root -c "echo 'sudo -u $OE_USER $OE_HOME_EXT/openerp-server --config=/etc/$OE_CONFIG.conf' >> $OE_HOME_EXT/start.sh"
 sudo chmod 755 $OE_HOME_EXT/start.sh
 
 
 
-echo -e "* Create init file"
+echo -e "* Criando arquivo de inicializacao"
 echo '#!/bin/sh' >> ~/$OE_CONFIG
 echo '### BEGIN INIT INFO' >> ~/$OE_CONFIG
 echo "# Provides: $OE_CONFIG" >> ~/$OE_CONFIG
@@ -186,13 +186,14 @@ echo '' >> ~/$OE_CONFIG
 echo 'esac' >> ~/$OE_CONFIG
 echo 'exit 0' >> ~/$OE_CONFIG
 
-echo -e "* Security Init File"
+echo -e "* Arquivo de seguranca"
 sudo mv ~/$OE_CONFIG /etc/init.d/$OE_CONFIG
 sudo chmod 755 /etc/init.d/$OE_CONFIG
 sudo chown root: /etc/init.d/$OE_CONFIG
 
-echo -e "* Start ODOO on Startup"
+echo -e "* Iniciando o ODOO na inicializacao"
 sudo update-rc.d $OE_CONFIG defaults
  
 sudo service $OE_CONFIG start
-echo "Done! The ODOO server can be started with: service $OE_CONFIG start"
+echo "Feito! O servidor ODOO pode ser iniciado com : service $OE_CONFIG start"
+
